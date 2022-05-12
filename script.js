@@ -11,7 +11,10 @@ function writePassword() {
 
 function generatePassword() {
   let password = "";
-  let source = [
+  let validInput = false;
+  let source;
+
+  const lowers = [
     "a",
     "b",
     "c",
@@ -106,16 +109,30 @@ function generatePassword() {
 
   const length = getLength();
 
-  if (confirm("Use uppercase letters?")) {
-    source = source.concat(uppers);
-  }
+  while (!validInput) {
+    source = [];
 
-  if (confirm("Use special characters?")) {
-    source = source.concat(specials);
-  }
+    if (confirm("Use lowercase letters?")) {
+      source = source.concat(lowers);
+    }
 
-  if (confirm("Use numbers?")) {
-    source = source.concat(numbers);
+    if (confirm("Use uppercase letters?")) {
+      source = source.concat(uppers);
+    }
+
+    if (confirm("Use special characters?")) {
+      source = source.concat(specials);
+    }
+
+    if (confirm("Use numbers?")) {
+      source = source.concat(numbers);
+    }
+
+    if (source.length > 0) {
+      validInput = true;
+    } else {
+      alert("You must select at least one type of character set to include!");
+    }
   }
 
   for (let i = 0; i < length; i++) {
@@ -128,9 +145,11 @@ function generatePassword() {
 }
 
 function getLength() {
-  let length = prompt("Enter your desired password length (128 character max)");
+  let length = prompt(
+    "Enter your desired password length (between 8 and 128 characters)"
+  );
   length = parseInt(length);
-  if (length > 128 || isNaN(length)) {
+  if (length < 8 || length > 128 || isNaN(length)) {
     getLength();
   } else {
     return length;
