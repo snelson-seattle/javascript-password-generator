@@ -100,5 +100,5 @@ Given that the frontend markup for this challenge was already provided, I would 
 ## Author
 
 - Website - [Scott E. Nelson](https://www.scottenelson.com)
-- GitHub - [Scott Nelson](https://github.com/snelson-seattle)
+- GitHub - [snelson-seattle](https://github.com/snelson-seattle)
 - LinkedIn - [Scott E. Nelson](https://www.linkedin.com/in/scottenelson)
