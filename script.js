@@ -1,3 +1,96 @@
+const lowers = [
+  "a",
+  "b",
+  "c",
+  "d",
+  "e",
+  "f",
+  "g",
+  "h",
+  "i",
+  "j",
+  "k",
+  "l",
+  "m",
+  "n",
+  "o",
+  "p",
+  "q",
+  "r",
+  "s",
+  "t",
+  "u",
+  "v",
+  "w",
+  "x",
+  "y",
+  "z",
+];
+const uppers = [
+  "A",
+  "B",
+  "C",
+  "D",
+  "E",
+  "F",
+  "G",
+  "H",
+  "I",
+  "J",
+  "K",
+  "L",
+  "M",
+  "N",
+  "O",
+  "P",
+  "Q",
+  "R",
+  "S",
+  "T",
+  "U",
+  "V",
+  "W",
+  "X",
+  "Y",
+  "Z",
+];
+const specials = [
+  "~",
+  "`",
+  "!",
+  "@",
+  "#",
+  "$",
+  "%",
+  "^",
+  "&",
+  "*",
+  "(",
+  ")",
+  "-",
+  "_",
+  "+",
+  "=",
+  "{",
+  "}",
+  "[",
+  "]",
+  "|",
+  "'",
+  '"',
+  "\\",
+  ":",
+  ";",
+  ",",
+  ".",
+  "<",
+  ">",
+  "?",
+  "/",
+  " ",
+];
+const numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+
 // Assignment Code
 var generateBtn = document.querySelector("#generate");
 
@@ -10,142 +103,44 @@ function writePassword() {
 }
 
 function generatePassword() {
-  let useLowers = false;
-  let useUppers = false;
-  let useSpecials = false;
-  let useNumbers = false;
-  let validInput = false;
-  let characterSet; // Variable for character source array
-
-  const lowers = [
-    "a",
-    "b",
-    "c",
-    "d",
-    "e",
-    "f",
-    "g",
-    "h",
-    "i",
-    "j",
-    "k",
-    "l",
-    "m",
-    "n",
-    "o",
-    "p",
-    "q",
-    "r",
-    "s",
-    "t",
-    "u",
-    "v",
-    "w",
-    "x",
-    "y",
-    "z",
-  ];
-  const uppers = [
-    "A",
-    "B",
-    "C",
-    "D",
-    "E",
-    "F",
-    "G",
-    "H",
-    "I",
-    "J",
-    "K",
-    "L",
-    "M",
-    "N",
-    "O",
-    "P",
-    "Q",
-    "R",
-    "S",
-    "T",
-    "U",
-    "V",
-    "W",
-    "X",
-    "Y",
-    "Z",
-  ];
-  const specials = [
-    "~",
-    "`",
-    "!",
-    "@",
-    "#",
-    "$",
-    "%",
-    "^",
-    "&",
-    "*",
-    "(",
-    ")",
-    "-",
-    "_",
-    "+",
-    "=",
-    "{",
-    "}",
-    "[",
-    "]",
-    "|",
-    "'",
-    '"',
-    "\\",
-    ":",
-    ";",
-    ",",
-    ".",
-    "<",
-    ">",
-    "?",
-    "/",
-    " ",
-  ];
-  const numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
-
-  const length = getLength();
-
-  while (!validInput) {
-    // This loop prompts the user to choose which character sets to include in the password, if no sets are chosen, the loop will repeat until at least one set has been selected
-    characterSet = [];
-
-    if (confirm("Use lowercase letters?")) {
-      useLowers = true;
-      characterSet = characterSet.concat(lowers);
-    }
-
-    if (confirm("Use uppercase letters?")) {
-      useUppers = true;
-      characterSet = characterSet.concat(uppers);
-    }
-
-    if (confirm("Use special characters?")) {
-      useSpecials = true;
-      characterSet = characterSet.concat(specials);
-    }
-
-    if (confirm("Use numbers?")) {
-      useNumbers = true;
-      characterSet = characterSet.concat(numbers);
-    }
-
-    if (characterSet.length > 0) {
-      validInput = true;
-    } else {
-      alert("You must select at least one type of character set to include!");
-    }
-  }
+  let characterSet = []; // Variable for character source array
 
   // Declare a password variable and a validated password variable
   let password;
   let validPassword = false;
+
+  // Get user inputs for length and character types to include
+  const length = getLength();
+  const useLowers = includeLowers();
+  const useUppers = includeUppers();
+  const useSpecials = includeSpecials();
+  const useNumbers = includeNumbers();
+
+  if (useLowers) {
+    // Add lowercase letters to character set if user has chosen to include them
+    characterSet = characterSet.concat(lowers);
+  }
+
+  if (useUppers) {
+    // Add uppercase letters to character set if user has chosen to include them
+    characterSet = characterSet.concat(uppers);
+  }
+
+  if (useSpecials) {
+    // Add special characters to character set if user has chosen to include them
+    characterSet = characterSet.concat(specials);
+  }
+
+  if (useNumbers) {
+    // Add numbers to character set if user has chosen to include them
+    characterSet = characterSet.concat(numbers);
+  }
+
+  // If user has not chosen to include any character types, warn them, then restart the process
+  if (characterSet.length === 0) {
+    alert("You must select at least one type of character set to include!");
+    return generatePassword();
+  }
 
   do {
     // Upon entry into do/while loop, clear any previous password value
@@ -219,11 +214,35 @@ function getLength() {
   );
   length = parseInt(length);
   if (length < 8 || length > 128 || isNaN(length)) {
-    alert("You must enter a numerical value from 8 to 128 characters!");
+    alert("You must enter a numerical value between 8 and 128!");
     getLength();
   } else {
     return length;
   }
+}
+
+// This function asks the user if they wish to include lowercase letters, if user selects "OK" will return true
+// otherwise it will return false
+function includeLowers() {
+  return confirm("Include lowercase letters?");
+}
+
+// This function asks the user if they wish to include uppercase letters, if user selects "OK" will return true
+// otherwise it will return false
+function includeUppers() {
+  return confirm("Include uppercase letters?");
+}
+
+// This function asks the user if they wish to include special characters, if user selects "OK" will return true
+// otherwise it will return false
+function includeSpecials() {
+  return confirm("Include special characters?");
+}
+
+// This function asks the user if they wish to include numbers, if user selects "OK" will return true
+// otherwise it will return false
+function includeNumbers() {
+  return confirm("Include numbers?");
 }
 
 // Add event listener to generate button
